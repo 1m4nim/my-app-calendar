@@ -9,3 +9,5 @@
 
 
 https://my-app-calendar-flax.vercel.app/
+
+※PC向けに作ったのでスマホでは使いづらいと思います
