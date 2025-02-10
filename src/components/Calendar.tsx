@@ -4,7 +4,7 @@ import {
   Droppable,
   Draggable,
   DropResult,
-} from "@hello-pangea/dnd";
+} from "@hello-pangea/dnd"; //react-beautiful-dndは古い
 import { useNavigate } from "react-router-dom";
 import "./Calendar.css";
 
