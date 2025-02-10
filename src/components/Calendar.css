@@ -1,28 +1,79 @@
 .calendar {
     display: flex;
     justify-content: center;
-    gap: 20px;
+    align-items: flex-start;
     padding: 20px;
+    font-family: Arial, sans-serif;
+    width: 100%;
+}
+
+.week {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    /* 1列7日分 */
+    gap: 20px;
+    width: 100%;
 }
 
 .day {
-    background: #f4f4f4;
-    padding: 10px;
+    text-align: center;
+    padding: 20px;
+    border: 2px solid #ccc;
     border-radius: 8px;
-    min-width: 150px;
+    background-color: #f9f9f9;
+}
+
+.weekday {
+    font-size: 18px;
+    font-weight: bold;
+    color: gray;
+}
+
+.date {
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 10px;
 }
 
 .events {
-    min-height: 50px;
-    background: white;
-    padding: 5px;
-    border-radius: 5px;
+    padding: 10px;
+    margin-top: 10px;
+    min-height: 150px;
+    background-color: #e8f4fc;
+    border-radius: 8px;
+    border: 1px dashed #ccc;
 }
 
 .event {
-    background: lightblue;
-    margin: 5px 0;
-    padding: 5px;
-    border-radius: 3px;
-    cursor: grab;
+    background-color: #4caf50;
+    color: white;
+    padding: 8px;
+    margin-bottom: 8px;
+    border-radius: 4px;
+    cursor: move;
+}
+
+input[type="time"],
+input[type="text"] {
+    width: 100%;
+    padding: 8px;
+    margin-top: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+button {
+    margin-top: 10px;
+    padding: 10px 20px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+    border-radius: 4px;
+    width: 100%;
+}
+
+button:hover {
+    background-color: #0056b3;
 }
