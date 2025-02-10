@@ -77,3 +77,47 @@ button {
 button:hover {
     background-color: #0056b3;
 }
+
+/* モーダルのスタイル */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    width: 50%;
+    /* モーダルの幅を50%に設定 */
+    max-width: 500px;
+    /* 最大幅を500pxに設定（必要に応じて変更） */
+    margin: 0 auto;
+    /* 中央に寄せる */
+}
+
+.modal-buttons {
+    margin-top: 20px;
+}
+
+.modal-buttons button {
+    margin: 0 10px;
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.modal-buttons button:hover {
+    background-color: #0056b3;
+}
