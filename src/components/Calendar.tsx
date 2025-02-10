@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   DragDropContext,
   Droppable,
@@ -11,7 +11,7 @@ import "./Calendar.css";
 type Event = {
   id: string;
   title: string;
-  time: string;
+  time: string; // 時間を追加
 };
 
 type Events = {
@@ -41,14 +41,28 @@ const Calendar: React.FC = () => {
     [key: string]: { title: string; time: string };
   }>({});
 
+  // 初期データのロード
+  useEffect(() => {
+    const savedEvents = localStorage.getItem("events");
+    if (savedEvents) {
+      setEvents(JSON.parse(savedEvents));
+    }
+  }, []);
+
+  // イベントが変更されたときにローカルストレージに保存
+  useEffect(() => {
+    if (Object.keys(events).length > 0) {
+      localStorage.setItem("events", JSON.stringify(events));
+    }
+  }, [events]);
+
   const today = new Date();
   const startOfWeek = getSunday(new Date());
   const weekDates = getWeekDates(startOfWeek);
   const weekDays = getWeekDays();
 
   const addEvent = (date: string) => {
-    if (!newEvent[date] || !newEvent[date].title || !newEvent[date].time)
-      return;
+    if (!newEvent[date]) return;
 
     const newEventObj: Event = {
       id: Math.random().toString(),
@@ -57,17 +71,11 @@ const Calendar: React.FC = () => {
     };
 
     setEvents((prev) => {
-      const updatedEvents = prev[date]
-        ? [...prev[date], newEventObj]
-        : [newEventObj];
-      updatedEvents.sort((a, b) => {
-        const timeA = a.time.split(":").map(Number);
-        const timeB = b.time.split(":").map(Number);
-        return timeA[0] === timeB[0]
-          ? timeA[1] - timeB[1]
-          : timeA[0] - timeB[0];
-      });
-      return { ...prev, [date]: updatedEvents };
+      const updatedEvents = {
+        ...prev,
+        [date]: [...(prev[date] || []), newEventObj],
+      };
+      return updatedEvents;
     });
 
     setNewEvent({ ...newEvent, [date]: { title: "", time: "" } });
@@ -122,24 +130,26 @@ const Calendar: React.FC = () => {
                     {...provided.droppableProps}
                     className="events"
                   >
-                    {(events[date] || []).map((event, index) => (
-                      <Draggable
-                        key={event.id}
-                        draggableId={event.id}
-                        index={index}
-                      >
-                        {(provided) => (
-                          <div
-                            ref={provided.innerRef}
-                            {...provided.draggableProps}
-                            {...provided.dragHandleProps}
-                            className="event"
-                          >
-                            <span>{event.time}</span> - {event.title}
-                          </div>
-                        )}
-                      </Draggable>
-                    ))}
+                    {(events[date] || [])
+                      .sort((a, b) => a.time.localeCompare(b.time)) // 時間順に並べ替え
+                      .map((event, index) => (
+                        <Draggable
+                          key={event.id}
+                          draggableId={event.id}
+                          index={index}
+                        >
+                          {(provided) => (
+                            <div
+                              ref={provided.innerRef}
+                              {...provided.draggableProps}
+                              {...provided.dragHandleProps}
+                              className="event"
+                            >
+                              {event.title} ({event.time})
+                            </div>
+                          )}
+                        </Draggable>
+                      ))}
                     {provided.placeholder}
                   </div>
                 )}
@@ -147,7 +157,6 @@ const Calendar: React.FC = () => {
               <input
                 type="text"
                 value={newEvent[date]?.title || ""}
-                style={{ height: "24px" }}
                 onChange={(e) =>
                   setNewEvent({
                     ...newEvent,
@@ -165,6 +174,7 @@ const Calendar: React.FC = () => {
                     [date]: { ...newEvent[date], time: e.target.value },
                   })
                 }
+                placeholder="時間を選択"
               />
               <button onClick={() => addEvent(date)}>追加</button>
             </div>
